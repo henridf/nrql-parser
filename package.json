@@ -1,0 +1,27 @@
+{
+  "name": "nrql-parser",
+  "version": "0.0.0",
+  "description": "Parse NRQL queries",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "./node_modules/pegjs/bin/pegjs --allowed-start-rules Query 'lib/nrql.pegjs'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/henridf/nrql-parser.git"
+  },
+  "author": "Henri DF",
+  "bugs": {
+    "url": "https://github.com/henridf/nrql-parser/issues"
+  },
+  "homepage": "https://github.com/henridf/nrql-parser",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "pegjs": "^0.8.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "leche": "^2.1.1",
+    "mocha": "^2.2.4"
+  }
+}

@@ -1,0 +1,147 @@
+-- https://github.com/newrelic/insights-about-pagerduty
+SELECT count(*) from PagerdutyIncident
+  FACET first_assigned_to_user
+  SINCE 1 week ago TIMESERIES
+
+SELECT histogram(created_on_hour, 24, 24) from PagerdutyIncident
+  WHERE eventVersion >= 2
+  SINCE 1 week ago
+
+SELECT histogram(open_duration, 600) from PagerdutyIncident
+  SINCE 1 week ago
+
+SELECT count(*) from PagerdutyIncident
+  WHERE  escalation_policy_name='Site Services'
+  SINCE 1 week ago TIMESERIES
+
+
+-- https://docs.newrelic.com/docs/insights/new-relic-insights/using-new-relic-query-language/using-nrql#executing-query
+
+SELECT uniqueCount(user) FROM PageView SINCE 1 week ago
+
+SELECT uniqueCount(user) FROM PageView SINCE 1 week ago COMPARE WITH 1 week ago
+
+SELECT count(*) FROM PageView SINCE 1 day ago COMPARE WITH 1 day ago TIMESERIES AUTO
+
+SELECT uniqueCount(uuid) FROM MobileSession FACET osVersion SINCE 7 days ago
+
+SELECT apdex(duration, t: 0.4) FROM Transaction WHERE customerName='MrBigshot' SINCE 1 day ago
+
+--  /Users/henridf/tmp/spring-travel/Insights-Dashboards/BookingsAtAGlance.json
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 hour ago COMPARE WITH 1 hour ago
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 hour ago FACET BookingHotelName LIMIT 6
+
+SELECT count(*) FROM Transaction FACET  BookingHotelName LIMIT 6 since 1 hour ago
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 day ago COMPARE WITH 1 day ago
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 day ago FACET BookingHotelName LIMIT 6
+
+SELECT count(*) FROM Transaction FACET  BookingHotelName LIMIT 6 since 1 day ago
+
+SELECT count(*) FROM Transaction FACET  BookingCity since 1 week ago limit 6
+
+SELECT count(*) FROM Transaction FACET BookingAgent since 1 day ago limit 5
+
+SELECT count(*) FROM Transaction FACET  searchCriteria LIMIT 10 since 1 week ago
+
+SELECT count(*) FROM Transaction FACET  BookingSmokingRoom since 1 week ago
+
+SELECT count(*) FROM Transaction FACET  BookingNumberOfBeds since 1 week ago
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 day ago FACET BookingZip LIMIT 6
+
+
+-- From https://docs.newrelic.com/docs/insights/new-relic-insights/using-new-relic-query-language/nrql-reference
+
+SELECT uniqueCount(USER) FROM  PageView WHERE userAgentOS = 'Mac' FACET countryCode LIMIT 20 SINCE 1 DAY ago
+
+SELECT histogram(duration, 50, 20) FROM PageView
+  WHERE countryCode IN ('CA', 'US') AND userAgentName='Safari'
+    SINCE 1 day ago
+
+
+--  From various json files under
+--  https://github.com/tmartin14/spring-travel.git/Insights-Dashboards/, using
+--  the script in this dir
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 hour ago COMPARE WITH 1 hour ago
+
+SELECT sum(BookingRevenue) FROM Transaction SINCE 1 hour ago FACET BookingHotelName LIMIT 6
+
+SELECT count(*) FROM Transaction FACET  BookingHotelName LIMIT 6 since 1 hour ago
+
+SELECT count(*) FROM Transaction FACET  BookingCity since 1 hour ago limit 6
+
+SELECT count(*) FROM Transaction FACET BookingAgent since 1 hour ago limit 5
+
+SELECT count(*) FROM Transaction FACET  BookingSmokingRoom since 1 hour ago
+
+
+
+--  /Users/henridf/tmp/spring-travel/Insights-Dashboards/OperationsOverview.json
+
+SELECT uniqueCount(session) FROM PageView SINCE 1 day ago COMPARE WITH 1 day ago
+
+SELECT count(*) FROM PageView since 1 day ago COMPARE WITH 1 day ago
+
+SELECT count(*) FROM Transaction since 1 day ago COMPARE WITH 1 day ago
+
+SELECT count(*) FROM PageView since 1 day ago FACET  city
+
+SELECT count(*) FROM PageView since 1 day ago FACET pageUrl
+
+SELECT count(*) FROM Transaction since 1 day ago FACET name
+
+SELECT count(*) FROM PageView since 1 day ago FACET  userAgentOS
+
+SELECT count(*) FROM PageView since 1 day ago FACET  userAgentName
+
+SELECT count(*) FROM PageView since 1 day ago FACET  userAgentName
+
+SELECT count(*) FROM PageView since 1 day ago FACET  name
+
+
+
+--  /Users/henridf/tmp/spring-travel/Insights-Dashboards/PerformanceNow.json
+
+select average(duration) FROM  PageView facet name TIMESERIES 1 minute SINCE 2 hour ago
+
+select average(duration) FROM Transaction  FACET transactionSubType TIMESERIES 1 minute SINCE 2 hour ago
+
+
+
+--  /Users/henridf/tmp/spring-travel/Insights-Dashboards/Trending.json
+
+SELECT count(*) FROM PageView since 1 day ago COMPARE WITH 1 week ago
+
+SELECT count(*) from PageView TIMESERIES AUTO COMPARE WITH 1 week ago
+
+SELECT average(duration) FROM PageView TIMESERIES AUTO COMPARE WITH 1 week ago
+
+SELECT count(*) FROM PageView facet countryCode since 1 week ago Limit 5
+
+SELECT count(*) FROM PageView facet userAgentName SINCE 1 week ago
+
+SELECT uniqueCount(session) FROM PageView facet appName since 1 week ago
+
+select average(duration) FROM PageView FACET userAgentName TIMESERIES 1 minute
+
+
+
+--  /Users/henridf/tmp/spring-travel/Insights-Dashboards/zzSynthetic Testing.json
+
+SELECT count(*) FROM Transaction FACET  BookingSmokingRoom since 5 minutes ago
+
+SELECT count(*) FROM Transaction FACET  BookingNumberOfBeds since 2 minutes ago
+
+SELECT  pageUrl, name FROM PageView since 30 minutes ago
+
+SELECT  name,searchCriteria, BookingNumberOfBeds, BookingHotelName,BookingAgent  FROM Transaction since 30 minutes ago
+
+SELECT searchCriteria, name, searchResultSize FROM Transaction since 30 minutes ago
+
+
+
