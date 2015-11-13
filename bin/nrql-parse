@@ -1,22 +1,86 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-var parser = require('../lib/nrql.js');
+var fs = require("fs");
+var util = require("util");
 
-var ast;
+var parser = require("../lib/nrql.js");
 
-var query =
-        'SELECT average(duration), percentile(duration, 50, 90)  FROM PageView SINCE 1 week AGO TIMESERIES AUTO';
-//'SELECT uniqueCount(session), percentile(duration, 95)  FROM PageView WHERE userAgentOS = "Windows"   FACET countryCode LIMIT 20';
 
-//'SELECT histogram(created_on_hour, origin) FROM PagerdutyIncident WHERE a = 1 OR b NOT LIKE "1" ';
-
-try {
-    ast = parser.parse(query);
-} catch (e) {
-    console.log("Syntax error at line", e.line, "column", e.column, ':', e.message);
-    process.exit(-1);
+function isOption(arg) {
+  return (/^-/).test(arg);
 }
 
+function usage() {
+    console.log("Parse a given NRQL query and output the resulting AST.");
+    console.log("");
+    console.log("Usage:");
+    console.log("   nrql-parse [-e query | input_file | -h | --help]");
+}
+
+function abort(message) {
+  console.error("Error: " + message);
+  exitFailure();
+}
+
+function exitSuccess() {
+  process.exit(0);
+}
+
+function exitFailure() {
+  process.exit(1);
+}
+
+function parseArgs(args) {
+    var nrql;
+
+    while (args.length > 0 && isOption(args[0])) {
+        switch (args[0]) {
+        case "-e":
+            args.shift();
+            nrql = args[0]
+            break;
+
+        case "-h":
+        case "--help":
+            usage();
+            exitSuccess();
+            break;
+
+        default:
+            abort("Unknown argument: " + args[0]);
+        }
+
+        args.shift();
+    }
+
+    if (nrql === undefined) {
+        if (args.length != 1) {
+            abort("Either pass in a single filename or a query using -e");
+        }
+        var inputFile = args[0];
+        nrql = fs.readFileSync(inputFile, 'utf8');
+    }
+
+    return nrql;
+}
+
+
+function parseNrql(query) {
+    try {
+        var ast = parser.parse(query);
+    } catch (e) {
+        abort(util.format("Syntax error at line %d, column %d: %s", e.line, e.column, e.message));
+    }
+    return ast;
+}
+
+// drop 'node' and script name
+process.argv.shift();
+process.argv.shift();
+
+var nrql = parseArgs(process.argv);
+var ast = parseNrql(nrql);
 console.log(JSON.stringify(ast, null, 4));
+
