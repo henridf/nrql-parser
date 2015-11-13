@@ -11,6 +11,7 @@
     "type": "git",
     "url": "https://github.com/henridf/nrql-parser.git"
   },
+  "license": "MIT",
   "author": "Henri DF",
   "bugs": {
     "url": "https://github.com/henridf/nrql-parser/issues"
