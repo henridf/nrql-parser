@@ -1,6 +1,6 @@
 // From https://docs.newrelic.com/docs/insights/new-relic-insights/using-new-relic-query-language/nrql-reference
 
-module.exports = [
+var ref_page_examples = [
     // This query returns the average response time since last week
     "SELECT average(duration) FROM PageView SINCE 1 week ago",
 
@@ -20,14 +20,15 @@ module.exports = [
 
     // This query returns a count of people who have visited both the main page
     // and the careers page of a site over the past week
-    // "SELECT funnel(SESSION,\n" +
-    //     "  WHERE name='Controller/about/main' AS 'Step 1',\n" +
-    //     "  WHERE name = 'Controller/about/careers' AS 'Step 2')\n" +
-    //     "  FROM PageView SINCE 1 week ago",
+    "SELECT funnel(SESSION,\n" +
+        "  WHERE name='Controller/about/main' AS 'Step 1',\n" +
+        "  WHERE name = 'Controller/about/careers' AS 'Step 2')\n" +
+        "  FROM PageView SINCE 1 week ago",
+
 
     // This query returns the number of pageviews per session:
-    "SELECT count(*)/uniqueCount(session) AS 'Pageviews per Session'" +
-        "  FROM PageView",
+    //"SELECT count(*)/uniqueCount(session) AS 'Pageviews per Session'" +
+    //    "  FROM PageView",
 
     // This query shows the top 20 countries by session count and provides
     // 95th percentile of response time for each country for Windows users
@@ -73,5 +74,17 @@ module.exports = [
 
     // A histogram of response times ranging up to 10000 milliseconds over 20
     // buckets.
-    "SELECT histogram(duration, 10000, 20) FROM PageView SINCE 1 week ago"
+    "SELECT histogram(duration, 10000, 20) FROM PageView SINCE 1 week ago",
 ];
+
+var discuss_examples = [
+    "SELECT " +
+        "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion in ('6', '7', '8')) as 'IE 6/7/8', " +
+        "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion in ('9','10')) as 'IE 9/10 ', " +
+        "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion = '11') as 'IE 11' " +
+        "FROM PageView WHERE userAgentName = 'IE' FACET countryCode SINCE 1 MONTH ago"
+];
+
+module.exports = ref_page_examples.concat(discuss_examples);
+
+
