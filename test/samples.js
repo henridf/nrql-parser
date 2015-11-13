@@ -77,6 +77,7 @@ var ref_page_examples = [
     "SELECT histogram(duration, 10000, 20) FROM PageView SINCE 1 week ago",
 ];
 
+// from discuss.newrelic.com
 var discuss_examples = [
     "SELECT " +
         "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion in ('6', '7', '8')) as 'IE 6/7/8', " +
@@ -86,6 +87,13 @@ var discuss_examples = [
     "SELECT filter(count(*), appName = 'App 1'), filter(count(*), appName = 'App 2'), filter(count(*), appName = 'App 4') FROM PageAction"
 ];
 
-module.exports = ref_page_examples.concat(discuss_examples);
+
+// from the spring-travel repo (see parse-spring-travel-json.js)
+var spring_travel_examples = [
+    "SELECT  name,searchCriteria, BookingNumberOfBeds, BookingHotelName,BookingAgent  FROM Transaction since 30 minutes ago"
+]
+
+
+module.exports = ref_page_examples.concat(discuss_examples).concat(spring_travel_examples);
 
 
