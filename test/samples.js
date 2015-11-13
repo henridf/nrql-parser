@@ -82,7 +82,8 @@ var discuss_examples = [
         "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion in ('6', '7', '8')) as 'IE 6/7/8', " +
         "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion in ('9','10')) as 'IE 9/10 ', " +
         "percentage(count(userAgentVersion), WHERE userAgentName='IE' and userAgentVersion = '11') as 'IE 11' " +
-        "FROM PageView WHERE userAgentName = 'IE' FACET countryCode SINCE 1 MONTH ago"
+        "FROM PageView WHERE userAgentName = 'IE' FACET countryCode SINCE 1 MONTH ago",
+    "SELECT filter(count(*), appName = 'App 1'), filter(count(*), appName = 'App 2'), filter(count(*), appName = 'App 4') FROM PageAction"
 ];
 
 module.exports = ref_page_examples.concat(discuss_examples);
