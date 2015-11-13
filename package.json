@@ -1,10 +1,11 @@
 {
   "name": "nrql-parser",
-  "version": "0.0.0",
-  "description": "Parse NRQL queries",
+  "version": "0.1.0",
+  "description": "Parse NRQL (New Relic Insights' query language)",
   "main": "index.js",
   "scripts": {
-    "postinstall": "./node_modules/pegjs/bin/pegjs --allowed-start-rules Query 'lib/nrql.pegjs'"
+      "postinstall": "./node_modules/pegjs/bin/pegjs --allowed-start-rules Query 'lib/nrql.pegjs'",
+      "test": "./node_modules/mocha/bin/mocha test/grammar.js"
   },
   "repository": {
     "type": "git",
